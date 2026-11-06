@@ -1,0 +1,6 @@
+{
+  "name": "QuickQR",
+  "description": "Free online QR code generator for URLs, Wi-Fi, text, email, phone numbers, and SMS. Custom colors, sizes, and instant high-resolution PNG and SVG downloads with 100% in-browser privacy.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

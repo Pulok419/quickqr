@@ -31,12 +31,14 @@ interface AllFormData {
 }
 
 const defaultStyles: QRStyleOptions = {
-  fgColor: '#0f172a',
+  designStyle: 'minimal',
+  fgColor: '#000000',
   bgColor: '#ffffff',
   isTransparentBg: false,
   size: 512,
   errorCorrection: 'M',
   margin: 2,
+  logo: null,
 };
 
 const initialFormData: AllFormData = {

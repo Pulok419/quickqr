@@ -42,14 +42,16 @@ export const QRPreview: React.FC<QRPreviewProps> = ({
   // Download PNG handler
   const handleDownloadPng = () => {
     if (!pngDataUrl || !isValid) return;
-    const filename = `quickqr-${activeTabName.toLowerCase()}-${options.size}px.png`;
+    const logoSuffix = options.logo ? '-with-logo' : '';
+    const filename = `quickqr-${activeTabName.toLowerCase()}${logoSuffix}-${options.size}px.png`;
     downloadFile(pngDataUrl, filename, true);
   };
 
   // Download SVG handler
   const handleDownloadSvg = () => {
     if (!svgString || !isValid) return;
-    const filename = `quickqr-${activeTabName.toLowerCase()}-vector.svg`;
+    const logoSuffix = options.logo ? '-with-logo' : '';
+    const filename = `quickqr-${activeTabName.toLowerCase()}${logoSuffix}-vector.svg`;
     downloadFile(svgString, filename, false);
   };
 
@@ -153,6 +155,12 @@ export const QRPreview: React.FC<QRPreviewProps> = ({
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-2">
             <span className="text-sm font-bold text-slate-900 tracking-tight">Live QR Preview</span>
+            {options.logo && (
+              <span className="inline-flex items-center gap-1 text-[10px] font-bold text-indigo-700 bg-indigo-50 border border-indigo-200/80 px-2 py-0.5 rounded-md">
+                <Sparkles className="w-3 h-3 text-indigo-600" />
+                <span>Logo Active</span>
+              </span>
+            )}
             {justGenerated ? (
               <span className="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-200/80 px-2 py-0.5 rounded-md animate-in fade-in duration-200">
                 <Check className="w-3 h-3 text-emerald-600" />
@@ -296,6 +304,16 @@ export const QRPreview: React.FC<QRPreviewProps> = ({
             <span>Print QR Code</span>
           </button>
         </div>
+
+        {/* Logo download format advice */}
+        {options.logo && (
+          <div className="p-2.5 bg-slate-50 border border-slate-200/80 rounded-xl text-[11px] text-slate-500 flex items-start gap-2">
+            <Info className="w-3.5 h-3.5 text-blue-600 shrink-0 mt-0.5" />
+            <div className="leading-snug">
+              <span>PNG download provides the highest pixel fidelity with the centered logo badge. SVG download includes the vector QR modules with an embedded logo overlay.</span>
+            </div>
+          </div>
+        )}
 
         {/* Client side privacy note */}
         <div className="flex items-center justify-center gap-1.5 text-[11px] text-slate-500 pt-1">

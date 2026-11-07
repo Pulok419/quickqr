@@ -34,11 +34,21 @@ export interface SmsFormData {
   message: string;
 }
 
+export type DesignStyle = 'minimal' | 'colorful';
+
+export interface QRLogoData {
+  dataUrl: string;
+  name: string;
+}
+
 export interface QRStyleOptions {
+  designStyle: DesignStyle;
   fgColor: string;
   bgColor: string;
   isTransparentBg: boolean;
   size: number;
   errorCorrection: ErrorCorrectionLevel;
   margin: number;
+  logo?: QRLogoData | null;
 }
+

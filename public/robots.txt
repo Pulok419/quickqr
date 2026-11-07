@@ -1,11 +1,4 @@
-# robots.txt for QuickQR
-# Allow all search engine bots to crawl public pages
 User-agent: *
 Allow: /
 
-# Specifically allow Googlebot
-User-agent: Googlebot
-Allow: /
-
-# Sitemap location
 Sitemap: https://quickqr.pulok419.workers.dev/sitemap.xml

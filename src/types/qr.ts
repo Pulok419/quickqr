@@ -36,13 +36,17 @@ export interface SmsFormData {
 
 export type DesignStyle = 'minimal' | 'colorful';
 
+export type QRFrameStyle = 'none' | 'bottom-banner' | 'top-banner' | 'card-frame';
+
 export interface QRLogoData {
   dataUrl: string;
   name: string;
+  sizeRatio?: number; // 0.15 to 0.26, default 0.20
 }
 
 export interface QRStyleOptions {
   designStyle: DesignStyle;
+  presetTheme?: string;
   fgColor: string;
   bgColor: string;
   isTransparentBg: boolean;
@@ -50,5 +54,9 @@ export interface QRStyleOptions {
   errorCorrection: ErrorCorrectionLevel;
   margin: number;
   logo?: QRLogoData | null;
+  frameStyle: QRFrameStyle;
+  frameText: string;
+  frameColor: string;
+  frameTextColor: string;
 }
 

@@ -42,16 +42,18 @@ export const QRPreview: React.FC<QRPreviewProps> = ({
   // Download PNG handler
   const handleDownloadPng = () => {
     if (!pngDataUrl || !isValid) return;
+    const frameSuffix = options.frameStyle && options.frameStyle !== 'none' ? `-${options.frameStyle}` : '';
     const logoSuffix = options.logo ? '-with-logo' : '';
-    const filename = `quickqr-${activeTabName.toLowerCase()}${logoSuffix}-${options.size}px.png`;
+    const filename = `quickqr-${activeTabName.toLowerCase()}${frameSuffix}${logoSuffix}-${options.size}px.png`;
     downloadFile(pngDataUrl, filename, true);
   };
 
   // Download SVG handler
   const handleDownloadSvg = () => {
     if (!svgString || !isValid) return;
+    const frameSuffix = options.frameStyle && options.frameStyle !== 'none' ? `-${options.frameStyle}` : '';
     const logoSuffix = options.logo ? '-with-logo' : '';
-    const filename = `quickqr-${activeTabName.toLowerCase()}${logoSuffix}-vector.svg`;
+    const filename = `quickqr-${activeTabName.toLowerCase()}${frameSuffix}${logoSuffix}-vector.svg`;
     downloadFile(svgString, filename, false);
   };
 
@@ -158,7 +160,12 @@ export const QRPreview: React.FC<QRPreviewProps> = ({
             {options.logo && (
               <span className="inline-flex items-center gap-1 text-[10px] font-bold text-indigo-700 bg-indigo-50 border border-indigo-200/80 px-2 py-0.5 rounded-md">
                 <Sparkles className="w-3 h-3 text-indigo-600" />
-                <span>Logo Active</span>
+                <span>Logo</span>
+              </span>
+            )}
+            {options.frameStyle && options.frameStyle !== 'none' && (
+              <span className="inline-flex items-center gap-1 text-[10px] font-bold text-purple-700 bg-purple-50 border border-purple-200/80 px-2 py-0.5 rounded-md">
+                <span>Framed</span>
               </span>
             )}
             {justGenerated ? (

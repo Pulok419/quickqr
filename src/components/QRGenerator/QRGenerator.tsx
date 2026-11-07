@@ -32,6 +32,7 @@ interface AllFormData {
 
 const defaultStyles: QRStyleOptions = {
   designStyle: 'minimal',
+  presetTheme: 'minimal',
   fgColor: '#000000',
   bgColor: '#ffffff',
   isTransparentBg: false,
@@ -39,6 +40,10 @@ const defaultStyles: QRStyleOptions = {
   errorCorrection: 'M',
   margin: 2,
   logo: null,
+  frameStyle: 'none',
+  frameText: 'SCAN ME',
+  frameColor: '#2563eb',
+  frameTextColor: '#ffffff',
 };
 
 const initialFormData: AllFormData = {

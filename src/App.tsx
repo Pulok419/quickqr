@@ -13,17 +13,29 @@ import { WhyQuickQR } from './components/WhyQuickQR';
 import { FAQ } from './components/FAQ';
 import { AboutSection } from './components/AboutSection';
 import { ContactSection } from './components/ContactSection';
+import { TemplatesGallery } from './components/TemplatesGallery';
+import { PosterMaker } from './components/PosterMaker/PosterMaker';
+import { QRScanner } from './components/QRScanner/QRScanner';
+import { BulkQRCreator } from './components/BulkQR/BulkQRCreator';
+import { QRTemplate } from './data/templates';
 import { Footer } from './components/Footer';
 import { PrivacyModal } from './components/PrivacyModal';
 
 export default function App() {
   const [privacyModalOpen, setPrivacyModalOpen] = useState(false);
+  const [appliedTemplate, setAppliedTemplate] = useState<QRTemplate | null>(null);
+  const [activeTemplateId, setActiveTemplateId] = useState<string>('minimal');
 
   const handleOpenContact = () => {
     const el = document.getElementById('contact');
     if (el) {
       el.scrollIntoView({ behavior: 'smooth' });
     }
+  };
+
+  const handleSelectTemplate = (template: QRTemplate) => {
+    setAppliedTemplate(template);
+    setActiveTemplateId(template.id);
   };
 
   return (
@@ -40,7 +52,26 @@ export default function App() {
         <Hero />
 
         {/* Core QR Code Generator Tool */}
-        <QRGenerator />
+        <QRGenerator
+          externalTemplate={appliedTemplate}
+          onTemplateApplied={() => setAppliedTemplate(null)}
+          onSelectTemplateId={(id) => setActiveTemplateId(id)}
+        />
+
+        {/* Ready-Made QR Design Templates Gallery */}
+        <TemplatesGallery
+          onSelectTemplate={handleSelectTemplate}
+          selectedTemplateId={activeTemplateId}
+        />
+
+        {/* QR Poster Maker & Table Stand Studio */}
+        <PosterMaker />
+
+        {/* QR Code Scanner & Inspector */}
+        <QRScanner />
+
+        {/* Bulk QR Code Creator & ZIP Exporter */}
+        <BulkQRCreator />
 
         {/* How QuickQR Works */}
         <HowItWorks />

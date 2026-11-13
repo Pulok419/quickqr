@@ -42,12 +42,36 @@ export const Header: React.FC<HeaderProps> = ({ onOpenPrivacy, onOpenContact }) 
           </a>
 
           {/* Zone 2: Concise single-line text links */}
-          <nav className="hidden md:flex items-center gap-7 text-sm font-medium text-slate-600">
+          <nav className="hidden lg:flex items-center gap-3.5 xl:gap-5 text-xs xl:text-sm font-medium text-slate-600">
             <button
               onClick={() => scrollToSection('generator')}
               className="hover:text-blue-600 transition-colors cursor-pointer whitespace-nowrap shrink-0"
             >
               QR Generator
+            </button>
+            <button
+              onClick={() => scrollToSection('templates')}
+              className="hover:text-blue-600 transition-colors cursor-pointer whitespace-nowrap shrink-0"
+            >
+              Templates
+            </button>
+            <button
+              onClick={() => scrollToSection('poster-maker')}
+              className="hover:text-indigo-600 transition-colors cursor-pointer whitespace-nowrap shrink-0"
+            >
+              Poster Maker
+            </button>
+            <button
+              onClick={() => scrollToSection('scanner')}
+              className="hover:text-emerald-600 transition-colors cursor-pointer whitespace-nowrap shrink-0"
+            >
+              QR Scanner
+            </button>
+            <button
+              onClick={() => scrollToSection('bulk-creator')}
+              className="hover:text-blue-600 transition-colors cursor-pointer whitespace-nowrap shrink-0"
+            >
+              Bulk QR
             </button>
             <button
               onClick={() => scrollToSection('how-it-works')}
@@ -87,7 +111,7 @@ export const Header: React.FC<HeaderProps> = ({ onOpenPrivacy, onOpenContact }) 
           </div>
 
           {/* Mobile hamburger button */}
-          <div className="flex md:hidden items-center gap-2">
+          <div className="flex lg:hidden items-center gap-2">
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className="p-2 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors"
@@ -102,13 +126,37 @@ export const Header: React.FC<HeaderProps> = ({ onOpenPrivacy, onOpenContact }) 
 
       {/* Mobile menu dropdown */}
       {mobileMenuOpen && (
-        <div className="md:hidden bg-white border-b border-slate-200 px-4 pt-2 pb-6 space-y-3 shadow-lg animate-in fade-in slide-in-from-top-2 duration-150">
+        <div className="lg:hidden bg-white border-b border-slate-200 px-4 pt-2 pb-6 space-y-3 shadow-lg animate-in fade-in slide-in-from-top-2 duration-150">
           <nav className="flex flex-col space-y-1">
             <button
               onClick={() => scrollToSection('generator')}
               className="text-left px-3 py-2.5 rounded-lg text-base font-medium text-slate-800 hover:bg-blue-50 hover:text-blue-600 transition-colors"
             >
               QR Generator
+            </button>
+            <button
+              onClick={() => scrollToSection('templates')}
+              className="text-left px-3 py-2.5 rounded-lg text-base font-medium text-slate-800 hover:bg-blue-50 hover:text-blue-600 transition-colors"
+            >
+              Templates Gallery
+            </button>
+            <button
+              onClick={() => scrollToSection('poster-maker')}
+              className="text-left px-3 py-2.5 rounded-lg text-base font-medium text-slate-800 hover:bg-indigo-50 hover:text-indigo-600 transition-colors"
+            >
+              Poster Maker Studio
+            </button>
+            <button
+              onClick={() => scrollToSection('scanner')}
+              className="text-left px-3 py-2.5 rounded-lg text-base font-medium text-slate-800 hover:bg-emerald-50 hover:text-emerald-600 transition-colors"
+            >
+              QR Scanner
+            </button>
+            <button
+              onClick={() => scrollToSection('bulk-creator')}
+              className="text-left px-3 py-2.5 rounded-lg text-base font-medium text-slate-800 hover:bg-blue-50 hover:text-blue-600 transition-colors"
+            >
+              Bulk QR Creator
             </button>
             <button
               onClick={() => scrollToSection('how-it-works')}

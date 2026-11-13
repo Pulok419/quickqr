@@ -21,6 +21,8 @@ import { EmailForm } from './InputForms/EmailForm';
 import { PhoneForm } from './InputForms/PhoneForm';
 import { SmsForm } from './InputForms/SmsForm';
 
+import { QRTemplate } from '../../data/templates';
+
 interface AllFormData {
   url: UrlFormData;
   text: TextFormData;
@@ -28,6 +30,12 @@ interface AllFormData {
   email: EmailFormData;
   phone: PhoneFormData;
   sms: SmsFormData;
+}
+
+interface QRGeneratorProps {
+  externalTemplate?: QRTemplate | null;
+  onTemplateApplied?: () => void;
+  onSelectTemplateId?: (id: string) => void;
 }
 
 const defaultStyles: QRStyleOptions = {
@@ -55,10 +63,15 @@ const initialFormData: AllFormData = {
   sms: { phone: '+1 800 555 0199', message: 'Hello! I scanned your QuickQR code.' },
 };
 
-export const QRGenerator: React.FC = () => {
+export const QRGenerator: React.FC<QRGeneratorProps> = ({
+  externalTemplate,
+  onTemplateApplied,
+  onSelectTemplateId,
+}) => {
   const [activeTab, setActiveTab] = useState<QRType>('url');
   const [formData, setFormData] = useState<AllFormData>(initialFormData);
   const [styles, setStyles] = useState<QRStyleOptions>(defaultStyles);
+  const [templateNotice, setTemplateNotice] = useState<string | null>(null);
 
   const [pngDataUrl, setPngDataUrl] = useState<string>('');
   const [svgString, setSvgString] = useState<string>('');
@@ -67,6 +80,39 @@ export const QRGenerator: React.FC = () => {
   const [errorMessage, setErrorMessage] = useState<string | undefined>();
   const [isGenerating, setIsGenerating] = useState<boolean>(false);
   const [justGenerated, setJustGenerated] = useState<boolean>(false);
+
+  // Apply template from external gallery selection
+  useEffect(() => {
+    if (externalTemplate) {
+      setStyles((prev) => ({
+        ...prev,
+        presetTheme: externalTemplate.id,
+        designStyle: externalTemplate.category === 'Minimal' ? 'minimal' : 'colorful',
+        fgColor: externalTemplate.fgColor,
+        bgColor: externalTemplate.bgColor,
+        isTransparentBg: false,
+        frameStyle: externalTemplate.frameStyle,
+        frameColor: externalTemplate.frameColor,
+        frameText: externalTemplate.frameText,
+        errorCorrection: externalTemplate.frameStyle !== 'none' || prev.logo ? 'H' : 'M',
+      }));
+      setTemplateNotice(`Template "${externalTemplate.name}" applied! Customize text, colors, frame, or logo below.`);
+      onSelectTemplateId?.(externalTemplate.id);
+      onTemplateApplied?.();
+      const timer = setTimeout(() => {
+        setTemplateNotice(null);
+      }, 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [externalTemplate, onSelectTemplateId, onTemplateApplied]);
+
+  // Handle styles change from internal customizer
+  const handleStylesChange = (newStyles: QRStyleOptions) => {
+    setStyles(newStyles);
+    if (newStyles.presetTheme) {
+      onSelectTemplateId?.(newStyles.presetTheme);
+    }
+  };
 
   // Manual trigger when user clicks "Generate QR Code"
   const handleManualGenerate = async () => {
@@ -174,6 +220,29 @@ export const QRGenerator: React.FC = () => {
         {/* Studio Workspace Card */}
         <div className="bg-white rounded-3xl border border-slate-200 shadow-sm p-4 sm:p-7 lg:p-8">
           
+          {/* Template Applied Notification Banner */}
+          {templateNotice && (
+            <div className="mb-6 p-3.5 bg-gradient-to-r from-purple-50 via-blue-50 to-indigo-50 border border-purple-200/80 rounded-2xl flex items-center justify-between text-xs text-purple-950 shadow-xs animate-in fade-in duration-200">
+              <div className="flex items-center gap-2.5">
+                <div className="w-6 h-6 rounded-lg bg-purple-600 text-white flex items-center justify-center shrink-0">
+                  <Sparkles className="w-3.5 h-3.5" />
+                </div>
+                <div>
+                  <span className="font-bold text-purple-900">{templateNotice}</span>
+                  <span className="block text-[11px] text-purple-700">All generator settings updated. You can fine-tune text, colors, frame style, or upload a logo.</span>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setTemplateNotice(null)}
+                className="p-1 text-purple-500 hover:text-purple-900 text-sm font-bold cursor-pointer"
+                title="Dismiss"
+              >
+                ✕
+              </button>
+            </div>
+          )}
+
           {/* Top Bar: Tabs + Clear/Reset Actions */}
           <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 mb-6 pb-6 border-b border-slate-100">
             <div className="flex-1">
@@ -295,8 +364,11 @@ export const QRGenerator: React.FC = () => {
                 </span>
                 <StyleCustomizer
                   options={styles}
-                  onChange={setStyles}
-                  onReset={() => setStyles(defaultStyles)}
+                  onChange={handleStylesChange}
+                  onReset={() => {
+                    setStyles(defaultStyles);
+                    onSelectTemplateId?.('minimal');
+                  }}
                 />
               </div>
 

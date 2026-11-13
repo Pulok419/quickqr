@@ -83,6 +83,26 @@ export const Footer: React.FC<FooterProps> = ({ onOpenPrivacy, onOpenContact }) 
             </h4>
             <ul className="space-y-2 text-xs">
               <li>
+                <button onClick={() => scrollTo('templates')} className="hover:text-blue-600 transition-colors cursor-pointer">
+                  Design Templates
+                </button>
+              </li>
+              <li>
+                <button onClick={() => scrollTo('poster-maker')} className="hover:text-indigo-600 transition-colors cursor-pointer">
+                  QR Poster Maker
+                </button>
+              </li>
+              <li>
+                <button onClick={() => scrollTo('scanner')} className="hover:text-emerald-600 transition-colors cursor-pointer">
+                  QR Code Scanner
+                </button>
+              </li>
+              <li>
+                <button onClick={() => scrollTo('bulk-creator')} className="hover:text-blue-600 transition-colors cursor-pointer">
+                  Bulk QR Creator
+                </button>
+              </li>
+              <li>
                 <button onClick={() => scrollTo('how-it-works')} className="hover:text-blue-600 transition-colors cursor-pointer">
                   How It Works
                 </button>

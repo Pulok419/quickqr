@@ -21,6 +21,7 @@ import {
   DesignStyle,
   QRFrameStyle,
 } from '../../types/qr';
+import { QR_TEMPLATES, QRTemplate } from '../../data/templates';
 
 interface StyleCustomizerProps {
   options: QRStyleOptions;
@@ -36,65 +37,6 @@ export const StyleCustomizer: React.FC<StyleCustomizerProps> = ({
   const [activeTab, setActiveTab] = useState<'presets' | 'colors' | 'frames' | 'logo' | 'advanced'>('presets');
   const [logoError, setLogoError] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
-
-  // Creative Presets
-  const presets = [
-    {
-      id: 'minimal',
-      name: 'Minimal Classic',
-      desc: 'Black & white, standard borderless',
-      fg: '#000000',
-      bg: '#ffffff',
-      frame: 'none' as QRFrameStyle,
-      frameColor: '#000000',
-      frameText: 'SCAN ME',
-      style: 'minimal' as DesignStyle,
-    },
-    {
-      id: 'ocean',
-      name: 'Ocean Blue',
-      desc: 'Cobalt blue with bottom banner',
-      fg: '#2563eb',
-      bg: '#ffffff',
-      frame: 'bottom-banner' as QRFrameStyle,
-      frameColor: '#2563eb',
-      frameText: 'SCAN ME',
-      style: 'colorful' as DesignStyle,
-    },
-    {
-      id: 'purple',
-      name: 'Royal Purple',
-      desc: 'Vibrant purple with bottom banner',
-      fg: '#7c3aed',
-      bg: '#ffffff',
-      frame: 'bottom-banner' as QRFrameStyle,
-      frameColor: '#7c3aed',
-      frameText: 'SCAN ME',
-      style: 'colorful' as DesignStyle,
-    },
-    {
-      id: 'emerald',
-      name: 'Forest Emerald',
-      desc: 'Clean green with Polaroid card frame',
-      fg: '#059669',
-      bg: '#ffffff',
-      frame: 'card-frame' as QRFrameStyle,
-      frameColor: '#059669',
-      frameText: 'SCAN FOR MENU',
-      style: 'colorful' as DesignStyle,
-    },
-    {
-      id: 'sunset',
-      name: 'Sunset Coral',
-      desc: 'Warm coral with top banner badge',
-      fg: '#ea580c',
-      bg: '#ffffff',
-      frame: 'top-banner' as QRFrameStyle,
-      frameColor: '#ea580c',
-      frameText: 'VISIT WEBSITE',
-      style: 'colorful' as DesignStyle,
-    },
-  ];
 
   // Foreground presets
   const fgPresets = [
@@ -162,17 +104,18 @@ export const StyleCustomizer: React.FC<StyleCustomizerProps> = ({
   const contrastWarning = isContrastLow();
 
   // Apply a design preset
-  const handleApplyPreset = (preset: typeof presets[0]) => {
+  const handleApplyPreset = (template: QRTemplate) => {
     onChange({
       ...options,
-      presetTheme: preset.id,
-      designStyle: preset.style,
-      fgColor: preset.fg,
-      bgColor: preset.bg,
+      presetTheme: template.id,
+      designStyle: template.category === 'Minimal' ? 'minimal' : 'colorful',
+      fgColor: template.fgColor,
+      bgColor: template.bgColor,
       isTransparentBg: false,
-      frameStyle: preset.frame,
-      frameColor: preset.frameColor,
-      frameText: preset.frameText,
+      frameStyle: template.frameStyle,
+      frameColor: template.frameColor,
+      frameText: template.frameText,
+      errorCorrection: template.frameStyle !== 'none' || options.logo ? 'H' : 'M',
     });
   };
 
@@ -342,38 +285,64 @@ export const StyleCustomizer: React.FC<StyleCustomizerProps> = ({
         <div className="space-y-4 animate-in fade-in duration-150">
           <div className="flex items-center justify-between mb-1">
             <label className="text-xs font-bold uppercase tracking-wider text-slate-600">
-              Curated Creative Presets
+              Ready-Made Design Templates
             </label>
-            <span className="text-[11px] text-slate-500">1-click instant styling</span>
+            <span className="text-[11px] text-slate-500">8 curated creative themes</span>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-            {presets.map((preset) => {
-              const isSelected = options.presetTheme === preset.id;
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+            {QR_TEMPLATES.map((template) => {
+              const isSelected = options.presetTheme === template.id;
               return (
                 <button
-                  key={preset.id}
+                  key={template.id}
                   type="button"
-                  onClick={() => handleApplyPreset(preset)}
-                  className={`p-3.5 text-left rounded-xl border text-xs transition-all cursor-pointer relative ${
+                  onClick={() => handleApplyPreset(template)}
+                  className={`p-3 text-left rounded-xl border text-xs transition-all cursor-pointer relative flex flex-col justify-between ${
                     isSelected
-                      ? 'border-blue-600 bg-blue-50/30 text-blue-950 ring-2 ring-blue-500/20 shadow-xs font-medium'
+                      ? 'border-blue-600 bg-blue-50/40 text-blue-950 ring-2 ring-blue-500/20 shadow-xs font-medium'
                       : 'border-slate-200 bg-white text-slate-700 hover:border-slate-300'
                   }`}
                 >
-                  <div className="flex items-center justify-between mb-1.5">
-                    <span className="font-bold text-sm text-slate-900">{preset.name}</span>
-                    {isSelected && <Check className="w-4 h-4 text-blue-600 shrink-0" />}
+                  <div>
+                    <div className="flex items-center justify-between mb-1">
+                      <span className="text-[10px] font-bold text-purple-700 bg-purple-50 px-1.5 py-0.5 rounded">
+                        {template.category}
+                      </span>
+                      {isSelected && <Check className="w-3.5 h-3.5 text-blue-600 shrink-0" />}
+                    </div>
+                    <div className="font-bold text-xs text-slate-900 mb-0.5">{template.name}</div>
+                    <p className="text-slate-500 text-[10px] leading-tight line-clamp-1 mb-2">{template.tagline}</p>
                   </div>
-                  <p className="text-slate-500 text-[11px] leading-snug mb-2.5">{preset.desc}</p>
                   
-                  <div className="flex items-center gap-2 text-[10px] text-slate-400">
-                    <span className="w-3.5 h-3.5 rounded-full border border-black/10 shrink-0" style={{ backgroundColor: preset.fg }} />
-                    <span className="truncate">{preset.frame === 'none' ? 'Standard frame' : 'With banner frame'}</span>
+                  <div className="flex items-center justify-between pt-1 border-t border-slate-100 text-[10px] text-slate-400">
+                    <div className="flex items-center gap-1.5">
+                      <span className="w-3 h-3 rounded-full border border-black/10 shrink-0" style={{ backgroundColor: template.fgColor }} />
+                      {template.frameStyle !== 'none' && (
+                        <span className="w-3 h-3 rounded-full border border-black/10 shrink-0" style={{ backgroundColor: template.frameColor }} />
+                      )}
+                    </div>
+                    <span className="text-[9px] uppercase font-semibold text-slate-500">
+                      {template.frameStyle === 'none' ? 'Clean' : template.frameStyle === 'card-frame' ? 'Polaroid' : 'Banner'}
+                    </span>
                   </div>
                 </button>
               );
             })}
+          </div>
+
+          <div className="pt-2 flex items-center justify-between text-xs text-slate-500 border-t border-slate-100">
+            <span>Looking for larger visual previews?</span>
+            <button
+              type="button"
+              onClick={() => {
+                const el = document.getElementById('templates');
+                if (el) el.scrollIntoView({ behavior: 'smooth' });
+              }}
+              className="text-xs font-semibold text-blue-600 hover:text-blue-700 hover:underline cursor-pointer"
+            >
+              Browse Full Templates Gallery ↓
+            </button>
           </div>
         </div>
       )}

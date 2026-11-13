@@ -312,6 +312,19 @@ export const QRPreview: React.FC<QRPreviewProps> = ({
           </button>
         </div>
 
+        {/* Quick Link to Poster Maker */}
+        <button
+          type="button"
+          onClick={() => {
+            const el = document.getElementById('poster-maker');
+            if (el) el.scrollIntoView({ behavior: 'smooth' });
+          }}
+          className="w-full py-2.5 px-3 rounded-xl text-xs font-semibold text-indigo-700 bg-indigo-50/80 hover:bg-indigo-100 border border-indigo-200/80 transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
+        >
+          <Sparkles className="w-3.5 h-3.5 text-indigo-600" />
+          <span>Turn into Poster or Table Stand ↓</span>
+        </button>
+
         {/* Logo download format advice */}
         {options.logo && (
           <div className="p-2.5 bg-slate-50 border border-slate-200/80 rounded-xl text-[11px] text-slate-500 flex items-start gap-2">

@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://quickqr.pulok419.workers.dev/sitemap.xml
+Sitemap: https://deft-chebakia-15a213.netlify.app/sitemap.xml
